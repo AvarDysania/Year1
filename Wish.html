@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Luck Darls</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest-green: #2d5a27;
+            --overlay-green: rgba(45, 90, 39, 0.85);
+            --glass-white: rgba(255, 255, 255, 0.92);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            min-height: 100dvh; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            overflow-y: auto; 
+            overflow-x: hidden;
+            
+            background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* --- Main Front Card --- */
+        .front-card {
+            position: relative;
+            z-index: 1;
+            background: var(--glass-white);
+            width: 85%;
+            max-width: 400px;
+            padding: 60px 40px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            margin: 20px;
+            /* Simple fade in for the card container itself */
+            animation: containerFade 1.5s ease;
+        }
+
+        @keyframes containerFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: var(--forest-green);
+            margin: 0 0 15px 0;
+            line-height: 1;
+            font-weight: 600;
+            min-height: 1em; 
+        }
+
+        /* --- RE-PLAYABLE TEXT ANIMATION CSS --- */
+        .char {
+            display: inline-block;
+            opacity: 0; /* Hidden by default */
+            transform: translateY(30px);
+        }
+
+        /* The animation class is added/removed by JS */
+        .char.active {
+            animation: professionalReveal 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+        }
+
+        @keyframes professionalReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        p {
+            font-size: 1.05rem;
+            color: #4a5d46;
+            font-weight: 400;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            opacity: 0;
+            animation: simpleFadeIn 1s ease forwards 0.8s;
+        }
+
+        @keyframes simpleFadeIn { to { opacity: 1; } }
+
+        .highlight {
+            color: var(--forest-green);
+            font-weight: 600;
+        }
+
+        .btn-msg {
+            background-color: var(--forest-green);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(45, 90, 39, 0.3);
+            white-space: nowrap;
+            opacity: 0;
+            animation: simpleFadeIn 1s ease forwards 1s;
+        }
+
+        .btn-msg:hover {
+            transform: translateY(-3px);
+            background-color: #1e3d1a;
+            box-shadow: 0 10px 25px rgba(45, 90, 39, 0.4);
+        }
+
+        /* --- Popup Modal --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(20, 35, 20, 0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+            z-index: 100;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .verse-card {
+            background: #fff;
+            width: 100%;
+            max-width: 450px;
+            padding: 50px 30px;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid var(--forest-green);
+        }
+
+        .modal-overlay.active .verse-card {
+            transform: scale(1);
+        }
+
+        .leaf-icon {
+            font-size: 2rem;
+            color: var(--forest-green);
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .verse-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem;
+            font-style: italic;
+            color: var(--forest-green);
+            line-height: 1.4;
+            margin-bottom: 25px;
+        }
+
+        .verse-ref {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: #4a4a4a;
+        }
+
+        .close-hint {
+            margin-top: 30px;
+            font-size: 0.75rem;
+            color: #888;
+            cursor: pointer;
+            text-decoration: underline;
+            letter-spacing: 1px;
+        }
+
+        /* --- Responsive Queries --- */
+        @media (max-width: 600px) {
+            .front-card { padding: 40px 25px; width: 88%; }
+            h1 { font-size: 2.2rem; }
+            p { font-size: 0.95rem; margin-bottom: 30px; }
+            .btn-msg { padding: 14px 24px; font-size: 0.75rem; width: 100%; }
+            .verse-card { padding: 40px 20px; }
+            .verse-text { font-size: 1.4rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-overlay"></div>
+
+    <div class="front-card">
+        <h1 id="animated-title">Good Luck Darls</h1>
+        <p>
+            I know how hard you have worked for this. <br>
+            Take a deep breath, trust yourself, and go shine.<br><br>
+            <span class="highlight">I am proud of you. ❤️</span>
+        </p>
+        <button class="btn-msg" onclick="toggleModal()">God's Message for You</button>
+    </div>
+
+    <div class="modal-overlay" id="modal" onclick="toggleModal()">
+        <div class="verse-card" onclick="event.stopPropagation()">
+            <span class="leaf-icon">🌿</span>
+            <div class="verse-text">
+                "So do not fear my child, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand."
+            </div>
+            <span class="verse-ref">Isaiah 41:10</span>
+            
+            <div class="close-hint" onclick="toggleModal()">Close</div>
+        </div>
+    </div>
+
+    <script>
+        // --- ANIMATION CONTROLLER ---
+
+        const title = document.getElementById('animated-title');
+        
+        // 1. Setup function (runs once on load)
+        function setupTitle() {
+            const text = title.textContent;
+            title.innerHTML = '';
+            // Split text into spans
+            for (let i = 0; i < text.length; i++) {
+                const span = document.createElement('span');
+                span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
+                span.className = 'char';
+                // Set the stagger delay
+                span.style.animationDelay = `${0.1 + (i * 0.04)}s`;
+                title.appendChild(span);
+            }
+        }
+
+        // 2. Play function (triggers the CSS animation)
+        function playAnimation() {
+            const chars = document.querySelectorAll('.char');
+            chars.forEach(char => {
+                // Reset animation by removing class, forcing reflow, adding class
+                char.classList.remove('active');
+                void char.offsetWidth; // Force Reflow/Repaint
+                char.classList.add('active');
+            });
+        }
+
+        // Run Setup immediately
+        setupTitle();
+        // Run Animation on Load
+        document.addEventListener("DOMContentLoaded", playAnimation);
+
+        // 3. Updated Modal Toggle with Animation Reset
+        function toggleModal() {
+            const modal = document.getElementById('modal');
+            const isActive = modal.classList.contains('active');
+
+            if (isActive) {
+                // CLOSING THE MODAL:
+                modal.classList.remove('active');
+                // Wait 300ms (so modal fades out) then replay Title Animation
+                setTimeout(() => {
+                    playAnimation();
+                }, 300);
+            } else {
+                // OPENING THE MODAL:
+                modal.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
